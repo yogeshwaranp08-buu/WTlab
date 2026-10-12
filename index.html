@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Model Lab Application</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body ng-controller="myCtrl">
+
+    <div class="container">
+        <h2>{{title}}</h2>
+
+        <input type="text"
+               ng-model="item"
+               placeholder="Enter {{label}}">
+
+        <button ng-click="add()">Add</button>
+        <button ng-click="show()">View All</button>
+        <button ng-click="clear()">Clear</button>
+
+        <h3>Records</h3>
+
+        <ul>
+            <li ng-repeat="x in items track by $index">
+                {{x}}
+                <button ng-click="remove($index)">Delete</button>
+            </li>
+        </ul>
+
+        <p>{{message}}</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
