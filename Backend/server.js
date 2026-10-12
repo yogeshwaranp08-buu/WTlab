@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(express.static(__dirname));
 
-const url = "mongodb+srv://yogesh:yogesh@demo.guun7st.mongodb.net/?appName=demo";
+const url = "mongodb+srv://user:pass@demo.guun7st.mongodb.net/?appName=demo";
 const client = new MongoClient(url);
 
 let collection;
