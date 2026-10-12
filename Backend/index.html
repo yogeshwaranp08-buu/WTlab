@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MongoDB CRUD</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+            text-align: center;
+            padding: 25px;
+        }
+        .box {
+            background: white;
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+            border-radius: 10px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+        }
+        td, th {
+            padding: 8px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <h2>MongoDB CRUD Application</h2>
+
+    <input id="name" placeholder="Enter name">
+    <button onclick="add()">Add</button>
+    <button onclick="view()">View All</button>
+
+    <p id="msg"></p>
+
+    <table>
+        <thead>
+            <tr><th>Name</th><th>Action</th></tr>
+        </thead>
+        <tbody id="data"></tbody>
+    </table>
+</div>
+
+<script>
+async function add() {
+    let name = document.getElementById("name").value.trim();
+
+    if (!name) {
+        document.getElementById("msg").innerText =
+            "Enter a name first";
+        return;
+    }
+
+    let r = await fetch("/add", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({name: name})
+    });
+
+    document.getElementById("msg").innerText = await r.text();
+    document.getElementById("name").value = "";
+    view();
+}
+
+async function view() {
+    let r = await fetch("/view");
+    let records = await r.json();
+
+    document.getElementById("data").innerHTML = "";
+
+    records.forEach(x => {
+        let tr = document.createElement("tr");
+        let td = document.createElement("td");
+        td.textContent = x.name;
+
+        let action = document.createElement("td");
+
+        let edit = document.createElement("button");
+        edit.textContent = "Edit";
+        edit.onclick = async () => {
+            let name = prompt("Enter new name", x.name);
+            if (name === null || !name.trim()) return;
+
+            await fetch("/update/" + x._id, {
+                method: "PUT",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({name: name.trim()})
+            });
+            view();
+        };
+
+        let del = document.createElement("button");
+        del.textContent = "Delete";
+        del.onclick = async () => {
+            await fetch("/delete/" + x._id, {
+                method: "DELETE"
+            });
+            view();
+        };
+
+        action.append(edit, del);
+        tr.append(td, action);
+        document.getElementById("data").append(tr);
+    });
+}
+
+view();
+</script>
+</body>
+</html>
