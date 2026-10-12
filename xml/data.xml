@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="style.xsl"?>
+<!DOCTYPE students SYSTEM "data.dtd">
+<students>
+    <student>
+        <name>Arun</name>
+        <department>IT</department>
+    </student>
+    <student>
+        <name>Priya</name>
+        <department>CSE</department>
+    </student>
+</students>
